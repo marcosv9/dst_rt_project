@@ -13,9 +13,9 @@ import pathlib
 
 def get_realtime_dst(starttime,
                      endtime):
+    '''
     
-    
-    
+    '''
     #validating input format
     for i in [starttime, endtime]:
         validate_date_input(i)
@@ -45,14 +45,15 @@ def get_realtime_dst(starttime,
     
     dates_checked = check_dst_in_database(starttime,
                                           endtime)
-
+    
+    
     dates = []
     
     for i in dates_checked:
         dates += [pd.to_datetime(i)]
         
     #cheking best available datatype for the period, if exists, file will be replaced
-    
+
     dates += check_best_available_datatype(starttime, endtime)
     
     
@@ -63,8 +64,13 @@ def get_realtime_dst(starttime,
     #avoiding duplicate dates    
     dates = list(set(dates))  
     
+    for date in dates:
+        if pd.to_datetime(date) > datem:
+            dates.remove(date)
+    
     #sorting dates  
-    dates.sort()   
+    dates.sort()
+    
     if len(dates) != 0:    
         for date in dates:
         
@@ -242,8 +248,12 @@ def get_realtime_dst(starttime,
                                                                               encoding='ascii')
         #deleting tmp files
         for date in dates:
-            
-            os.remove(f'dst_{date.year}_{str(date.month).zfill(2)}_realtime.txt')
+            if os.path.isfile(os.path.join(working_directory,
+                                           f'dst_{date.year}_{str(date.month).zfill(2)}_realtime.txt'
+                                           )
+                              ) == True:
+                
+                os.remove(f'dst_{date.year}_{str(date.month).zfill(2)}_realtime.txt')
             
         
 
@@ -329,7 +339,9 @@ def check_dst_in_database(starttime,
     #        for month in range(1,13):
     #            
     #            missing_date = years_without_files
-    missing_date.sort()      
+    
+    #missing_date.sort()
+      
     #df_dst = df_dst.resample('M').mean()    
     return missing_date 
       
@@ -380,6 +392,7 @@ def update_datatype_periods():
                                     'datatype_intervals.txt'),
                        sep = ',',
                        index = False)
+    return
 
 def check_best_available_datatype(starttime,
                                   endtime):
@@ -539,11 +552,12 @@ def validate_date_input(str_date):
   
 if __name__ == '__main__':
     
-    df = get_realtime_dst(starttime= '2015-03-01',
-                          endtime = '2022-10-30')
+    df = get_realtime_dst(starttime= '1957-01-01',
+                          endtime = '2022-10-18')
     print(df)    
-    #dates = check_dst_in_database(starttime = '2020-10-01',
-    #                           endtime = '2021-10-30')
+    #dates = check_dst_in_database(starttime = '2020-01-01',
+    #                           endtime = '2022-10-30')
+    #print(dates)
 
     #update_datatype_periods()
     
