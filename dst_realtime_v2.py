@@ -340,7 +340,7 @@ def check_dst_in_database(starttime,
     #            
     #            missing_date = years_without_files
     
-    #missing_date.sort()
+    missing_date.sort()
       
     #df_dst = df_dst.resample('M').mean()    
     return missing_date 
@@ -552,8 +552,8 @@ def validate_date_input(str_date):
   
 if __name__ == '__main__':
     
-    df = get_realtime_dst(starttime= '1957-01-01',
-                          endtime = '2022-10-18')
+    df = get_realtime_dst(starttime= '2020-01-01',
+                          endtime = '2022-10-22')
     print(df)    
     #dates = check_dst_in_database(starttime = '2020-01-01',
     #                           endtime = '2022-10-30')
@@ -564,4 +564,4 @@ if __name__ == '__main__':
     #df = check_best_available_datatype('2021-06-01','2022-12-31')
     #print(df)
     
-    #plot_dst_index(starttime = '1957-10-15', endtime = '2022-10-18')
+    plot_dst_index(starttime = '2022-05-15', endtime = '2022-10-18')
